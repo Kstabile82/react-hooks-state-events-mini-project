@@ -1,16 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
+//update form to be a controlled component so all inputs in state
 
-function NewTaskForm() {
+function NewTaskForm({categories, onTaskFormSubmit}) {
+  let [text, setText] = useState("")
+  let [category, setCategory] = useState("Code")
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onTaskFormSubmit({ text, category });
+    setText("")
+    setCategory("Code")
+  }
   return (
-    <form className="new-task-form">
+    <form onSubmit={handleSubmit} className="new-task-form">  
       <label>
         Details
-        <input type="text" name="text" />
+        <input onChange={(e) => setText(e.target.value)} name="text" type="text" />
       </label>
       <label>
         Category
-        <select name="category">
-          {/* render <option> elements for each category here */}
+        <select onChange={(e) => setCategory(e.target.value)} name="category">
+          {categories.map((cat) => (
+            <option key={cat}>{cat}</option>
+          ))}
         </select>
       </label>
       <input type="submit" value="Add task" />
